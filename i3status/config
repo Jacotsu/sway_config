@@ -1,0 +1,81 @@
+general {
+	separator = True
+        output_format = "i3bar"
+        colors = true
+        interval = 5
+}
+
+order += "tztime local"
+order += "weather_owm milano"
+order += "wireless wlp2s0"
+order += "ethernet enp0s25"
+order += "vpn_status VPN"
+order += "battery_level 0"
+order += "volume master"
+
+
+wireless wlp2s0 {
+        format_up = "♱: %quality@%essid, %bitrate"
+        format_down = ""
+	on_click 1 = "exec nm-connection-editor"
+}
+
+ethernet enp0s25 {
+	format_up = "🖧"
+	format_down = ""
+	on_click 1 = "exec nm-connection-editor"
+}
+
+battery_level 0 {
+        format = "{icon} {percent}% {time_remaining}"
+        format_down = "No battery"
+	last_full_capacity = true
+	charging_character = '⚡'
+        status_chr = "⚡ CHR"
+        status_bat = "🔋 BAT"
+        status_unk = "∿ AC"
+        status_full = "☻ FULL"
+	hide_seconds = True
+        path = "/sys/class/power_supply/BAT%d/uevent"
+	integer_battery_capacity = true
+        threshold_bad = 10
+        threshold_degraded = 30
+        threshold_full = 80
+	notify_low_level = True
+	threshold_type = time
+	on_click 1 = "exec gnome-power-statistics"
+}
+
+
+vpn_status VPN {
+        # path exists when a VPN tunnel launched by nmcli/nm-applet is active
+        # path = "/proc/sys/net/ipv4/conf/tun0"
+	format_down=""
+	format="🔑 {name}"
+}
+
+tztime local {
+        format = "%a %b %d %H:%M"
+	on_click 1 = "exec gnome-calendar"
+}
+
+weather_owm milano {
+  api_key = "yourapikey"
+  city = Milan
+  country = IT
+  forecast_include_today = true
+  unit_rain = mm
+  unit_snow = mm
+  unit_temperature = c
+  unit_wind = kmh
+  on_click 1 = "exec xdg-open https://openweathermap.org/city/6542283"
+}
+
+volume master {
+        format = "🔊: %volume"
+        format_muted = "🔇"
+        device = "pulse:0"
+	on_click 1 = "exec pavucontrol"
+	on_click 4 = "exec sh -c \"pactl set-sink-volume $(pactl list sinks | grep -B 1 RUNNING | sed '1q;d' | sed 's/[^0-9]\+//g') +1%\""
+	on_click 5 = "exec sh -c \"pactl set-sink-volume $(pactl list sinks | grep -B 1 RUNNING | sed '1q;d' | sed 's/[^0-9]\+//g') -1%\""
+}

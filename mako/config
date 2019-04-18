@@ -1,0 +1,8 @@
+default-timeout=5000
+width=900
+border-size=0
+text-color=#4DB6ACFF
+background-color=#222D32FF
+font=Roboto-Regular
+anchor=top-center
+max-visible=3
